@@ -21,7 +21,6 @@ Install KinD
 # which kind
 # kind version
 ```
-```
 
 Create cluster
 
