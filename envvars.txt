@@ -1,0 +1,22 @@
+# vCenter config/credentials
+export VSPHERE_SERVER='192.168.1.30'                # (required) The vCenter server IP or FQDN
+export VSPHERE_USERNAME='administrator@vsphere.local'  # (required) The username used to access the remote vSphere endpoint
+export VSPHERE_PASSWORD='VMware1!'  # (required) The password used to access the remote vSphere endpoint
+
+# vSphere deployment configs
+export VSPHERE_DATACENTER='LAB-DC'         # (required) The vSphere datacenter to deploy the management cluster on
+export VSPHERE_DATASTORE='datastore1'         # (required) The vSphere datastore to deploy the management cluster on
+export VSPHERE_NETWORK='VM Network'               # (required) The VM network to deploy the management cluster on
+export VSPHERE_RESOURCE_POOL='*/Resources'            # (required) The vSphere resource pool for your VMs
+export VSPHERE_FOLDER='vm'                          # (optional) The VM folder for your VMs, defaults to the root vSphere folder if not set.
+export VSPHERE_TEMPLATE='centos-7-kube-v1.16.3'  # (required) The VM template to use for your management cluster.
+export VSPHERE_DISK_GIB='50'                        # (optional) The VM Disk size in GB, defaults to 20 if not set
+export VSPHERE_NUM_CPUS='2'                         # (optional) The # of CPUs for control plane nodes in your management cluster, defaults to 2 if not set
+export VSPHERE_MEM_MIB='2048'                       # (optional) The memory (in MiB) for control plane nodes in your management cluster, defaults to 2048 if not set
+export SSH_AUTHORIZED_KEY='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDA51JuJO5+Y2J6uJ1Ymg4VpnSpgywGRT7WF4wuJTbujJ0nenV9zz3D1IVNQuE8OpowmpZ//r9ci/68p7BccE1YO5KUvaGQ3O4bza5gzZ/DLVqU2AM6cRvVYWOLjC+m5pKkwvazWnh/HusiqNpDTijz5eqJrLDKPTK6XQbsvMah9g64PNEJcBUsQGRxv2kaHHMC5yCWH+YyzXtHivENbKrLe1zJeTVW4X2ttZd9WVWA7tRWegpt9xytkXdGISIcIpjBuM2whWzouDTjRAYRyAOyWfMOuBGt+dWi0Y/SdhOs+gt5syB4uhzJ1FmCUIH1k0T+WT+qRAW5FPb7dAojUqyl root@k8s-f-11'      # (optional) The public ssh authorized key on all machines in this cluster
+
+# Kubernetes configs
+export KUBERNETES_VERSION='1.16.3'        # (optional) The Kubernetes version to use, defaults to 1.16.3
+export SERVICE_CIDR='100.64.0.0/13'       # (optional) The service CIDR of the management cluster, defaults to "100.64.0.0/13"
+export CLUSTER_CIDR='100.96.0.0/11'       # (optional) The cluster CIDR of the management cluster, defaults to "100.96.0.0/11"
+export SERVICE_DOMAIN='cluster.local'     # (optional) The k8s service domain of the management cluster, defaults to "cluster.local"
