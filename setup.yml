@@ -1,0 +1,164 @@
+---
+- name: setup KinD host
+  hosts: all
+  remote_user: root
+  tasks:
+
+  - name: set hostname
+    hostname:
+      name: "{{ inventory_hostname }}"
+
+#  - name: update rpms
+#    yum:
+#      name: '*'
+#      state: latest
+#      disablerepo: docker-ce-stable,kubernetes
+#    notify:
+#      - os_reboot
+#      - os_reboot_wait
+
+#  - name: disable selinux
+#    replace:
+#      dest: /etc/selinux/config
+#      regexp: '^SELINUX=.*$'
+#      replace: 'SELINUX=disabled'
+#    notify:
+#      - os_reboot
+#      - os_reboot_wait
+
+#  - name: install basic RPMs
+#    yum:
+#      name:
+#        - firewalld
+#        - yum-utils
+#        - device-mapper-persistent-data
+#        - lvm2
+#      state: latest
+
+  - name: install basic RPMs
+    yum:
+      name:
+        - oracle-golang-release-el7
+      state: latest
+
+  - name: install golang-bin RPMs
+    yum:
+      name:
+        - golang-bin
+      tate: latest
+
+  - name: set GOPATH for root
+    lineinfile:
+      path: /root/.bash_profile
+      line: 'export PATH=$(go env GOPATH)/bin:$PATH'
+
+  - name: install demo RPMs
+    yum:
+      name:
+        - bind-utils
+        - bridge-utils
+        - tcpdump
+        - bash-completion
+      state: latest
+
+  - name: enable firewalld
+    service:
+      name: firewalld
+      enabled: true
+      state: started
+
+  - name: Copy /etc/sysctl.d/ipv6.conf
+    copy:
+      content: "net.ipv6.conf.all.disable_ipv6 = 1"
+      dest: /etc/sysctl.d/ipv6.conf
+
+  - name: add sysctl file
+    copy:
+      content: |
+        net.bridge.bridge-nf-call-ip6tables = 1
+        net.bridge.bridge-nf-call-iptables = 1
+        vm.swappiness = 10
+      dest: /etc/sysctl.d/k8s.conf
+    notify:
+      - sysctl_reload
+
+#  - name: get docker ce repo
+#    get_url:
+#      url: https://download.docker.com/linux/centos/docker-ce.repo
+#      dest: /etc/yum.repos.d/
+
+  - name: enable Oracle Linux ol7_addons repo
+    ini_file:
+      path: /etc/yum.repos.d/public-yum-ol7.repo
+      section: ol7_addons
+      option: enabled
+      value: 1
+    when:
+      - ansible_distribution == "OracleLinux"
+
+#  - name: install container-selinux rpms
+#    yum:
+#      name:
+#        - container-selinux
+#      state: installed
+#      enablerepo: ol7_addons
+#    when:
+#      - ansible_distribution == "OracleLinux"
+
+  - name: install docker and kubectl rpms
+    yum:
+      name:
+        - docker-engine
+        - kubectl
+      enablerepo: ol7_addons
+      state: installed
+
+  - name: start docker
+    service:
+      name: docker
+      enabled: true
+      state: started
+
+
+#  - name: add kubectl bash completion
+#    lineinfile:
+#      path: /root/.bash_profile
+#      line: 'source <(kubectl completion bash)'
+
+  - name: start kubelet
+    service:
+      name: kubelet
+      enabled: true
+
+  handlers:
+  - name: remove_swap
+    command:
+      cmd: swapoff -a
+
+  - name: sysctl_reload
+    command:
+      cmd: sysctl --system
+
+  - name: systemctl_daemon_reload
+    command:
+      cmd: systemctl daemon-reload
+
+  - name: os_reboot
+    command:
+      cmd: reboot
+    async: 1
+    poll: 0
+    ignore_errors: true
+
+  - name: os_reboot_wait
+    wait_for:
+      host: "{{ ansible_host }}"
+      port: 22
+      delay: 15
+    delegate_to: localhost
+
+  - name: restart_kubelet
+    yum:
+      name: kubelet
+      state: restarted
+
