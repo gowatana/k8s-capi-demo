@@ -55,7 +55,7 @@ Upload vCenter credentials as a Kubernetes secret
 WIP
 ```
 
-# clustercli
+# clusterctl
 
 WIP
 
