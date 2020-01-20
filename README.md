@@ -112,6 +112,26 @@ data:
 EOF
 ```
 
+Error?:  
+infrastructure-components
+
+```
+[root@k8s-f-01-01 ~]# kubectl create -f https://github.com/kubernetes-sigs/cluster-api-provider-vsphere/releases/download/v0.5.4/infrastructure-components.yaml
+customresourcedefinition.apiextensions.k8s.io/vsphereclusters.infrastructure.cluster.x-k8s.io created
+customresourcedefinition.apiextensions.k8s.io/vspheremachines.infrastructure.cluster.x-k8s.io created
+customresourcedefinition.apiextensions.k8s.io/vspheremachinetemplates.infrastructure.cluster.x-k8s.io created
+role.rbac.authorization.k8s.io/capv-leader-election-role created
+clusterrole.rbac.authorization.k8s.io/capv-manager-role created
+clusterrole.rbac.authorization.k8s.io/capv-proxy-role created
+rolebinding.rbac.authorization.k8s.io/capv-leader-election-rolebinding created
+clusterrolebinding.rbac.authorization.k8s.io/capv-manager-rolebinding created
+clusterrolebinding.rbac.authorization.k8s.io/capv-proxy-rolebinding created
+service/capv-controller-manager-metrics-service created
+deployment.apps/capv-controller-manager created
+Error from server (AlreadyExists): error when creating "https://github.com/kubernetes-sigs/cluster-api-provider-vsphere/releases/download/v0.5.4/infrastructure-components.yaml": namespaces "capv-system" already exists
+```
+
+
 # clusterctl
 
 ## install clusterctl
