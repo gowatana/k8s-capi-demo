@@ -45,7 +45,7 @@
     yum:
       name:
         - golang-bin
-      tate: latest
+      state: latest
 
   - name: set GOPATH for root
     lineinfile:
@@ -125,10 +125,10 @@
 #      path: /root/.bash_profile
 #      line: 'source <(kubectl completion bash)'
 
-  - name: start kubelet
-    service:
-      name: kubelet
-      enabled: true
+#  - name: start kubelet
+#    service:
+#      name: kubelet
+#      enabled: true
 
   handlers:
   - name: remove_swap
@@ -157,8 +157,8 @@
       delay: 15
     delegate_to: localhost
 
-  - name: restart_kubelet
-    yum:
-      name: kubelet
-      state: restarted
+#  - name: restart_kubelet
+#    yum:
+#      name: kubelet
+#      state: restarted
 
