@@ -46,22 +46,62 @@ check cluster
 
 # Cluster API
 
-install Cluster API
+install Cluster API  
+cluster-api-components
 
 ```
-# kubectl create -f https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.2.9/cluster-api-components.yaml
+[root@k8s-f-01-01 ~]# kubectl create -f https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.2.9/cluster-api-components.yaml
+namespace/capi-system created
+customresourcedefinition.apiextensions.k8s.io/clusters.cluster.x-k8s.io created
+customresourcedefinition.apiextensions.k8s.io/machinedeployments.cluster.x-k8s.io created
+customresourcedefinition.apiextensions.k8s.io/machines.cluster.x-k8s.io created
+customresourcedefinition.apiextensions.k8s.io/machinesets.cluster.x-k8s.io created
+role.rbac.authorization.k8s.io/capi-leader-election-role created
+clusterrole.rbac.authorization.k8s.io/capi-manager-role created
+rolebinding.rbac.authorization.k8s.io/capi-leader-election-rolebinding created
+clusterrolebinding.rbac.authorization.k8s.io/capi-manager-rolebinding created
+deployment.apps/capi-controller-manager created
 ```
 
 install Bootstrap providor
 
 ```
-# kubectl create -f https://github.com/kubernetes-sigs/cluster-api-bootstrap-provider-kubeadm/releases/download/v0.1.5/bootstrap-components.yaml
+[root@k8s-f-01-01 ~]# kubectl create -f https://github.com/kubernetes-sigs/cluster-api-bootstrap-provider-kubeadm/releases/download/v0.1.5/bootstrap-components.yaml
+namespace/cabpk-system created
+customresourcedefinition.apiextensions.k8s.io/kubeadmconfigs.bootstrap.cluster.x-k8s.io created
+customresourcedefinition.apiextensions.k8s.io/kubeadmconfigtemplates.bootstrap.cluster.x-k8s.io created
+role.rbac.authorization.k8s.io/cabpk-leader-election-role created
+clusterrole.rbac.authorization.k8s.io/cabpk-manager-role created
+clusterrole.rbac.authorization.k8s.io/cabpk-proxy-role created
+rolebinding.rbac.authorization.k8s.io/cabpk-leader-election-rolebinding created
+clusterrolebinding.rbac.authorization.k8s.io/cabpk-manager-rolebinding created
+clusterrolebinding.rbac.authorization.k8s.io/cabpk-proxy-rolebinding created
+service/cabpk-controller-manager-metrics-service created
+deployment.apps/cabpk-controller-manager created
 ```
 
-Upload vCenter credentials as a Kubernetes secret
+Upload vCenter credentials as a Kubernetes secret  
+TODO: Base64 check.
 
 ```
-WIP
+$ cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    control-plane: controller-manager
+  name: capv-system
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: capv-manager-bootstrap-credentials
+  namespace: capv-system
+type: Opaque
+data:
+  username: "administrator@vsphere.local"
+  password: "Vk13YXJlMSEK"
+EOF
 ```
 
 # clusterctl
