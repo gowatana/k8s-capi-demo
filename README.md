@@ -21,7 +21,6 @@ Install KinD
 # which kind
 # kind version
 ```
-```
 
 Create cluster
 
@@ -56,7 +55,7 @@ Upload vCenter credentials as a Kubernetes secret
 WIP
 ```
 
-# clustercli
+# clusterctl
 
 WIP
 
