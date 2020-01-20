@@ -80,8 +80,16 @@ service/cabpk-controller-manager-metrics-service created
 deployment.apps/cabpk-controller-manager created
 ```
 
+base64
+
+```
+[root@k8s-f-01-01 ~]# echo administrator@vsphere.local | base64
+YWRtaW5pc3RyYXRvckB2c3BoZXJlLmxvY2FsCg==
+[root@k8s-f-01-01 ~]# echo VMware1! | base64
+Vk13YXJlMSEK
+```
+
 Upload vCenter credentials as a Kubernetes secret  
-TODO: Base64 check.
 
 ```
 $ cat <<EOF | kubectl apply -f -
@@ -99,7 +107,7 @@ metadata:
   namespace: capv-system
 type: Opaque
 data:
-  username: "administrator@vsphere.local"
+  username: "YWRtaW5pc3RyYXRvckB2c3BoZXJlLmxvY2FsCg=="
   password: "Vk13YXJlMSEK"
 EOF
 ```
