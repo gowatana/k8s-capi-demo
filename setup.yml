@@ -130,6 +130,12 @@
 #      name: kubelet
 #      enabled: true
 
+  - name: copy envvars.txt
+    copy:
+      src: files/envvars.txt
+      dest: /root/envvars.txt
+
+
   handlers:
   - name: remove_swap
     command:
