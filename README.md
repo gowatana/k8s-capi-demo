@@ -17,7 +17,7 @@ $ ansible-playbook setup.yml
 pre check
 
 ```
-ssh root@10.0.3.135
+$ ssh root@10.0.3.135
 # go version
 # docker info
 # kubectl version
@@ -30,6 +30,8 @@ Install KinD
 # which kind
 # kind version
 ```
+
+# Test KinD
 
 Create cluster
 
@@ -44,7 +46,7 @@ check cluster
 # kubectl cluster-info --context kind-kind
 ```
 
-# Cluster API
+# SKIP: Cluster API
 
 install Cluster API  
 cluster-api-components
@@ -135,7 +137,7 @@ service/capv-controller-manager-metrics-service unchanged
 deployment.apps/capv-controller-manager unchanged
 ```
 
-# clusterctl
+# ClusterAPI clusterctl
 
 ## install clusterctl
 
