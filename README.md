@@ -193,10 +193,11 @@ Generated ./out/management-cluster/provider-components.yaml
 WARNING: ./out/management-cluster/provider-components.yaml includes vSphere credentials
 ```
 
-create cluster
+create cluster  
+-v, --v Level number for the log level verbosity (ex. 6)
 
 ```
-./clusterctl create cluster \
+$ ./clusterctl create cluster \
 --bootstrap-type kind \
 --bootstrap-flags name=management-cluster \
 --cluster ./out/management-cluster/cluster.yaml \
@@ -238,6 +239,13 @@ I0115 01:50:13.886393   18380 clusterdeployer.go:150] Creating node machines in 
 I0115 01:50:13.893621   18380 applymachines.go:46] Creating machines in namespace "default"
 I0115 01:50:13.893668   18380 clusterdeployer.go:164] Done provisioning cluster. You can now access your cluster with kubectl --kubeconfig ./out/management-cluster/kubeconfig
 I0115 01:50:13.894783   18380 createbootstrapcluster.go:36] Cleaning up bootstrap cluster.
+```
+
+if failed, delete "management-cluster".
+
+```
+# kind get kubeconfig --name=management-cluster > ./out/management-cluster/kubeconfig
+# ./clusterctl delete cluster --bootstrap-type kind --kubeconfig=./out/management-cluster/kubeconfig --provider-components ./out/management-cluster/provider-components.yaml
 ```
 
 get cluster info
