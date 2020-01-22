@@ -326,7 +326,7 @@ vspheremachinetemplate.infrastructure.cluster.x-k8s.io/workload-cluster-1-md-0 c
 get workload-cluster-1/kubeconfig
 
 ```
-[root@k8s-f-11 ~]# kubectl get secret workload-cluster-1-kubeconfig -o=jsonpath='{.data.value}' | > { base64 -d 2>/dev/null || base64 -D; } >./out/workload-cluster-1/kubeconfig
+[root@k8s-f-11 ~]# kubectl get secret workload-cluster-1-kubeconfig -o=jsonpath='{.data.value}' | { base64 -d 2>/dev/null || base64 -D; } > ./out/workload-cluster-1/kubeconfig
 ```
 
 test workload-cluster
