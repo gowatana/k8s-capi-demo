@@ -339,6 +339,34 @@ workload-cluster-1-controlplane-0          NotReady   master   6m59s   v1.16.3
 workload-cluster-1-md-0-78469c8cf9-5kl9b   NotReady   <none>   5m45s   v1.16.3
 ```
 
+setup network add-on: antrea
+
+```
+# kubectl apply -f https://github.com/vmware-tanzu/antrea/releases/download/v0.2.0/antrea.yml
+```
+
+antrea is "Running" status
+
+```
+[root@k8s-f-03-01 ~]# kubectl get pods -n kube-system
+NAME                                                        READY   STATUS    RESTARTS   AGE
+antrea-agent-dmrdf                                          2/2     Running   0          2m2s
+antrea-agent-gl9rp                                          2/2     Running   0          2m2s
+antrea-controller-54fcbd7f67-hhcnf                          1/1     Running   0          2m2s
+coredns-5644d7b6d9-k7xjj                                    1/1     Running   0          12h
+coredns-5644d7b6d9-zw77h                                    1/1     Running   0          12h
+etcd-workload-cluster-1-controlplane-0                      1/1     Running   0          12h
+kube-apiserver-workload-cluster-1-controlplane-0            1/1     Running   0          12h
+kube-controller-manager-workload-cluster-1-controlplane-0   1/1     Running   0          12h
+kube-proxy-c7g66                                            1/1     Running   0          12h
+kube-proxy-zbwsb                                            1/1     Running   0          12h
+kube-scheduler-workload-cluster-1-controlplane-0            1/1     Running   0          12h
+vsphere-cloud-controller-manager-ptx26                      1/1     Running   0          12h
+vsphere-csi-controller-0                                    5/5     Running   0          12h
+vsphere-csi-node-2wcst                                      3/3     Running   0          81s
+vsphere-csi-node-6955j                                      3/3     Running   0          85s
+```
+
 # Reference
 
 https://kind.sigs.k8s.io/docs/user/quick-start/
