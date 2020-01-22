@@ -17,7 +17,7 @@ $ ansible-playbook setup.yml
 pre check
 
 ```
-ssh root@10.0.3.135
+$ ssh root@10.0.3.135
 # go version
 # docker info
 # kubectl version
@@ -30,6 +30,8 @@ Install KinD
 # which kind
 # kind version
 ```
+
+# Test KinD
 
 Create cluster
 
@@ -44,7 +46,7 @@ check cluster
 # kubectl cluster-info --context kind-kind
 ```
 
-# Cluster API
+# SKIP: Cluster API
 
 install Cluster API  
 cluster-api-components
@@ -87,6 +89,11 @@ base64
 YWRtaW5pc3RyYXRvckB2c3BoZXJlLmxvY2FsCg==
 [root@k8s-f-01-01 ~]# echo VMware1! | base64
 Vk13YXJlMSEK
+
+[gowatana@infra-jbox-01 ~]$ echo -n 'administrator@vsphere.local' | base64
+YWRtaW5pc3RyYXRvckB2c3BoZXJlLmxvY2Fs
+[gowatana@infra-jbox-01 ~]$ echo -n 'VMware1!' | base64
+Vk13YXJlMSE=
 ```
 
 Upload vCenter credentials as a Kubernetes secret  
@@ -107,8 +114,8 @@ metadata:
   namespace: capv-system
 type: Opaque
 data:
-  username: "YWRtaW5pc3RyYXRvckB2c3BoZXJlLmxvY2FsCg=="
-  password: "Vk13YXJlMSEK"
+  username: "YWRtaW5pc3RyYXRvckB2c3BoZXJlLmxvY2Fs"
+  password: "Vk13YXJlMSE="
 EOF
 ```
  
@@ -130,7 +137,7 @@ service/capv-controller-manager-metrics-service unchanged
 deployment.apps/capv-controller-manager unchanged
 ```
 
-# clusterctl
+# ClusterAPI clusterctl
 
 ## install clusterctl
 
