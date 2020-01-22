@@ -17,24 +17,6 @@
 #      - os_reboot
 #      - os_reboot_wait
 
-#  - name: disable selinux
-#    replace:
-#      dest: /etc/selinux/config
-#      regexp: '^SELINUX=.*$'
-#      replace: 'SELINUX=disabled'
-#    notify:
-#      - os_reboot
-#      - os_reboot_wait
-
-#  - name: install basic RPMs
-#    yum:
-#      name:
-#        - firewalld
-#        - yum-utils
-#        - device-mapper-persistent-data
-#        - lvm2
-#      state: latest
-
   - name: install basic RPMs
     yum:
       name:
@@ -96,15 +78,6 @@
     when:
       - ansible_distribution == "OracleLinux"
 
-#  - name: install container-selinux rpms
-#    yum:
-#      name:
-#        - container-selinux
-#      state: installed
-#      enablerepo: ol7_addons
-#    when:
-#      - ansible_distribution == "OracleLinux"
-
   - name: install docker and kubectl rpms
     yum:
       name:
@@ -120,21 +93,25 @@
       state: started
 
 
-#  - name: add kubectl bash completion
-#    lineinfile:
-#      path: /root/.bash_profile
-#      line: 'source <(kubectl completion bash)'
+  - name: add kubectl bash completion
+    lineinfile:
+      path: /root/.bash_profile
+      line: 'source <(kubectl completion bash)'
 
-#  - name: start kubelet
-#    service:
-#      name: kubelet
-#      enabled: true
+  - name: create demo dir
+    file:
+      path: /root/demo
+      state: directory
 
   - name: copy envvars.txt
     copy:
       src: files/envvars.txt
       dest: /root/envvars.txt
 
+  - name: copy demo YAMLs
+    copy:
+      src: files/yelb.yml
+      dest: /root/yelb.yml
 
   handlers:
   - name: remove_swap
@@ -162,9 +139,4 @@
       port: 22
       delay: 15
     delegate_to: localhost
-
-#  - name: restart_kubelet
-#    yum:
-#      name: kubelet
-#      state: restarted
 
