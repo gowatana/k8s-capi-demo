@@ -92,26 +92,20 @@
       enabled: true
       state: started
 
-
   - name: add kubectl bash completion
     lineinfile:
       path: /root/.bash_profile
       line: 'source <(kubectl completion bash)'
-
-  - name: create demo dir
-    file:
-      path: /root/demo
-      state: directory
 
   - name: copy envvars.txt
     copy:
       src: files/envvars.txt
       dest: /root/envvars.txt
 
-  - name: copy demo YAMLs
-    copy:
-      src: files/yelb.yml
-      dest: /root/yelb.yml
+  - name: create demo dir
+    file:
+      path: /root/demo
+      state: directory
 
   handlers:
   - name: remove_swap
@@ -139,4 +133,14 @@
       port: 22
       delay: 15
     delegate_to: localhost
+
+- name: setup Cluster API demo
+  hosts: all
+  remote_user: root
+  tasks:
+
+  - name: copy demo YAMLs
+    copy:
+      src: files/yelb.yml
+      dest: /root/demo/yelb.yml
 
