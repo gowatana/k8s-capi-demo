@@ -37,6 +37,7 @@ KinD のインストール。
 clusterctl のインストール。
 
 ```
+# mkdir bin
 # curl -L -o ./bin/clusterctl https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.2.9/clusterctl-linux-amd64
 # chmod +x ./bin/clusterctl
 # which clusterctl
