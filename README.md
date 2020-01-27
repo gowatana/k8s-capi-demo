@@ -1,12 +1,13 @@
-# KinD demo
+Cluster API & vSphere デモ
 
 ## OS
 
 Oracle Linux 7.7+
 
-## Demo
+# 1. Ansible ホスト: 前提環境のセットアップ
 
-base setup
+Ansible でのセットアップ。  
+KinD ホストで実行する場合は、Playbook の OS 再起動で一度切断される。
 
 ```
 $ vi hosts
@@ -14,7 +15,9 @@ $ ansible all -m ping
 $ ansible-playbook setup.yml
 ```
 
-pre check
+# 2. KinD ホスト: 確認と kind / clusterctl インストール
+
+事前チェック。
 
 ```
 $ ssh root@10.0.3.135
@@ -23,7 +26,7 @@ $ ssh root@10.0.3.135
 # kubectl version
 ```
 
-Install KinD
+KinD のインストール。
 
 ```
 # GO111MODULE="on" go get sigs.k8s.io/kind@v0.6.0
@@ -31,9 +34,7 @@ Install KinD
 # kind version
 ```
 
-# ClusterAPI clusterctl
-
-## install clusterctl
+clusterctl のインストール。
 
 ```
 [root@k8s-f-11 ~]# curl -L -O https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.2.9/clusterctl-linux-amd64
@@ -41,13 +42,17 @@ Install KinD
 [root@k8s-f-11 ~]# chmod +x clusterctl
 ```
 
-## OVA deploy
+# 3. vCenter での OVA デプロイ
 
+k8s クラスタを作成する vSphere 環境に、専用の OVA をデプロイしておく。
+
+ダウンロード リンク集  
 https://github.com/kubernetes-sigs/cluster-api-provider-vsphere/blob/release-0.5/README.md#kubernetes-versions-with-published-ovas
 
+デモで利用する OVA  
 http://storage.googleapis.com/capv-images/release/v1.16.3/centos-7-kube-v1.16.3.ova
 
-## Management-Cluster
+# 4. KinD ホスト: Management-Cluster
 
 create management cluster config from envvars.txt
 
@@ -142,7 +147,7 @@ I0115 01:50:13.893668   18380 clusterdeployer.go:164] Done provisioning cluster.
 I0115 01:50:13.894783   18380 createbootstrapcluster.go:36] Cleaning up bootstrap cluster.
 ```
 
-if failed, delete "management-cluster".
+WIP: 失敗時の management-cluster 削除
 
 ```
 # kind get kubeconfig --name=management-cluster > ./out/management-cluster/kubeconfig
@@ -158,7 +163,7 @@ NAME                                STATUS   ROLES    AGE     VERSION
 management-cluster-controlplane-0   Ready    master   6m32s   v1.16.3
 ```
 
-# Workload-cluster
+## 4. KinD ホスト: Workload-cluster
 
 export kubeconfig
 
