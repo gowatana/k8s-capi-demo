@@ -37,9 +37,10 @@ KinD のインストール。
 clusterctl のインストール。
 
 ```
-[root@k8s-f-11 ~]# curl -L -O https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.2.9/clusterctl-linux-amd64
-[root@k8s-f-11 ~]# ln -s clusterctl-linux-amd64 clusterctl
-[root@k8s-f-11 ~]# chmod +x clusterctl
+# curl -L -o ./bin/clusterctl https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.2.9/clusterctl-linux-amd64
+# chmod +x ./bin/clusterctl
+# which clusterctl
+/root/bin/clusterctl
 ```
 
 # 3. vCenter での OVA デプロイ
@@ -103,7 +104,7 @@ create cluster
 -v, --v Level number for the log level verbosity (ex. 6)
 
 ```
-$ ./clusterctl create cluster \
+$ clusterctl create cluster \
 --bootstrap-type kind \
 --bootstrap-flags name=management-cluster \
 --cluster ./out/management-cluster/cluster.yaml \
@@ -116,7 +117,7 @@ $ ./clusterctl create cluster \
 ex.
 
 ```
-[root@k8s-f-11 ~]# ./clusterctl create cluster \
+[root@k8s-f-11 ~]# clusterctl create cluster \
 >   --bootstrap-type kind \
 >   --bootstrap-flags name=management-cluster \
 >   --cluster ./out/management-cluster/cluster.yaml \
