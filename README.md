@@ -160,7 +160,7 @@ WIP: 失敗時の management-cluster 削除
 get cluster info
 
 ```
-[root@k8s-f-11 ~]# export KUBECONFIG="$(pwd)/out/management-cluster/kubeconfig"
+[root@k8s-f-11 ~]# export KUBECONFIG=$(pwd)/out/management-cluster/kubeconfig
 [root@k8s-f-11 ~]# kubectl get nodes
 NAME                                STATUS   ROLES    AGE     VERSION
 management-cluster-controlplane-0   Ready    master   6m32s   v1.16.3
@@ -267,16 +267,39 @@ workload-cluster-1-controlplane-0          NotReady   master   6m59s   v1.16.3
 workload-cluster-1-md-0-78469c8cf9-5kl9b   NotReady   <none>   5m45s   v1.16.3
 ```
 
-setup network add-on: antrea
+Pod Network Add-on のセットアップ A: Antrea パターン
+
+```
+# kubectl apply -f ./out/workload-cluster-1/addons.yaml
+configmap/calico-config created
+customresourcedefinition.apiextensions.k8s.io/felixconfigurations.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ipamblocks.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/blockaffinities.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ipamhandles.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ipamconfigs.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/bgppeers.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/bgpconfigurations.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ippools.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/hostendpoints.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/clusterinformations.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/globalnetworkpolicies.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/globalnetworksets.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/networkpolicies.crd.projectcalico.org created
+clusterrole.rbac.authorization.k8s.io/calico-kube-controllers created
+clusterrolebinding.rbac.authorization.k8s.io/calico-kube-controllers created
+clusterrole.rbac.authorization.k8s.io/calico-node created
+clusterrolebinding.rbac.authorization.k8s.io/calico-node created
+daemonset.apps/calico-node created
+serviceaccount/calico-node created
+deployment.apps/calico-kube-controllers created
+serviceaccount/calico-kube-controllers created
+```
+
+Pod Network Add-on のセットアップ B: Antrea パターン
 
 ```
 # kubectl apply -f https://github.com/vmware-tanzu/antrea/releases/download/v0.2.0/antrea.yml
-```
-
-antrea is "Running" status
-
-```
-[root@k8s-f-03-01 ~]# kubectl get pods -n kube-system
+# kubectl get pods -n kube-system
 NAME                                                        READY   STATUS    RESTARTS   AGE
 antrea-agent-dmrdf                                          2/2     Running   0          2m2s
 antrea-agent-gl9rp                                          2/2     Running   0          2m2s
