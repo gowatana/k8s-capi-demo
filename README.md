@@ -231,6 +231,24 @@ machinedeployment.cluster.x-k8s.io/workload-cluster-1-md-0 created
 vspheremachinetemplate.infrastructure.cluster.x-k8s.io/workload-cluster-1-md-0 created
 ```
 
+scale up
+
+```
+# kubectl get machinedeployments
+NAME                      AGE
+workload-cluster-1-md-0   14m
+# kubectl scale machinedeployments workload-cluster-1-md-0 --replicas=4
+machinedeployment.cluster.x-k8s.io/workload-cluster-1-md-0 scaled
+# kubectl get machine
+NAME                                       PROVIDERID                                       PHASE
+management-cluster-controlplane-0          vsphere://4203f195-eb0e-2fa4-204e-96d9ce065e73   running
+workload-cluster-1-controlplane-0          vsphere://42033bd3-ab9f-220b-21d5-611009b9421f   running
+workload-cluster-1-md-0-78469c8cf9-h5tqh   vsphere://4203c8e8-6c68-0588-9b6e-153f226bd595   running
+workload-cluster-1-md-0-78469c8cf9-kt4t8   vsphere://4203d026-a08a-cde4-a8d7-db1804459b04   running
+workload-cluster-1-md-0-78469c8cf9-lhcfn   vsphere://4203e93d-0f3b-16fe-e0bb-1ff1e8602cf0   running
+workload-cluster-1-md-0-78469c8cf9-sx88z   vsphere://42039950-aefe-2714-b711-14ef6d834938   running
+```
+
 get workload-cluster-1/kubeconfig
 
 ```
