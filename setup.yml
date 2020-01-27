@@ -107,6 +107,11 @@
       path: /root/demo
       state: directory
 
+  - name: remove anaconda-ks.cfg
+    file:
+      path: /root/anaconda-ks.cfg
+      state: absent
+
   handlers:
   - name: remove_swap
     command:
