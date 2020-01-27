@@ -1,6 +1,6 @@
 Cluster API & vSphere デモ
 
-## OS
+## 想定 OS
 
 Oracle Linux 7.7+
 
