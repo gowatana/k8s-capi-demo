@@ -1,6 +1,0 @@
-[kubernetes-kind-host]
-#k8s-f-01-01 ansible_host=10.0.3.135
-#k8s-f-02-01 ansible_host=10.0.3.121
-k8s-f-03-01 ansible_host=10.0.3.106
-
-
