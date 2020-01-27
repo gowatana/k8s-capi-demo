@@ -152,7 +152,8 @@ WIP: 失敗時の management-cluster 削除
 
 ```
 # kind get kubeconfig --name=management-cluster > ./out/management-cluster/kubeconfig
-# ./clusterctl delete cluster --bootstrap-type kind --kubeconfig=./out/management-cluster/kubeconfig --provider-components ./out/management-cluster/provider-components.yaml
+# clusterctl delete cluster --bootstrap-type kind --kubeconfig=./out/management-cluster/kubeconfig --provider-components ./out/management-cluster/provider-components.yaml
+# clusterctl delete cluster --bootstrap-type kind --kubeconfig out/management-cluster/kubeconfig -p out/management-cluster/provider-components.yaml -n default -v 5
 ```
 
 get cluster info
@@ -169,7 +170,7 @@ management-cluster-controlplane-0   Ready    master   6m32s   v1.16.3
 export kubeconfig
 
 ```
-[root@k8s-f-11 ~]# export KUBECONFIG="$(pwd)/out/management-cluster/kubeconfig"
+[root@k8s-f-11 ~]# export KUBECONFIG=$(pwd)/out/management-cluster/kubeconfig
 ```
 
 create config yaml
@@ -185,11 +186,11 @@ gcr.io/cluster-api-provider-vsphere/release/manifests:v0.5.4 \
 ex.
 
 ```
-[root@k8s-f-11 ~]# docker run --rm \
->   -v "$(pwd)":/out \
->   -v "$(pwd)/envvars.txt":/envvars.txt:ro \
->   gcr.io/cluster-api-provider-vsphere/release/manifests:v0.5.4 \
->   -c workload-cluster-1
+[root@k8s-c01-f-01 ~]# docker run --rm \
+> -v "$(pwd)":/out \
+> -v "$(pwd)/envvars.txt":/envvars.txt:ro \
+> gcr.io/cluster-api-provider-vsphere/release/manifests:v0.5.4 \
+> -c workload-cluster-1
 Checking 192.168.1.30 for vSphere version
 Detected vSphere version 6.7.3
 Generated ./out/workload-cluster-1/addons.yaml
