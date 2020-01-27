@@ -1,8 +1,6 @@
 Cluster API & vSphere デモ
 
-## 想定 OS
-
-Oracle Linux 7.7+
+* 想定 OS: Oracle Linux 7.7+
 
 # 1. Ansible ホスト: 前提環境のセットアップ
 
