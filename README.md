@@ -166,7 +166,7 @@ NAME                                STATUS   ROLES    AGE     VERSION
 management-cluster-controlplane-0   Ready    master   6m32s   v1.16.3
 ```
 
-## 4. KinD ホスト: Workload-cluster
+# 5. KinD ホスト: Workload-cluster 作成
 
 export kubeconfig
 
@@ -249,15 +249,15 @@ workload-cluster-1-md-0-78469c8cf9-lhcfn   vsphere://4203e93d-0f3b-16fe-e0bb-1ff
 workload-cluster-1-md-0-78469c8cf9-sx88z   vsphere://42039950-aefe-2714-b711-14ef6d834938   running
 ```
 
-get workload-cluster-1/kubeconfig
+# 6. KinD ホスト: Workload-cluster への Add-on
+
+workload-cluster-1 の kubeconfig を作成
 
 ```
 [root@k8s-f-11 ~]# kubectl get secret workload-cluster-1-kubeconfig -o=jsonpath='{.data.value}' | { base64 -d 2>/dev/null || base64 -D; } > ./out/workload-cluster-1/kubeconfig
 ```
 
-# use workload-cluster
-
-test workload-cluster
+workload-cluster の kubeconfig を export
 
 ```
 [root@k8s-f-11 ~]# export KUBECONFIG=./out/workload-cluster-1/kubeconfig
@@ -267,7 +267,7 @@ workload-cluster-1-controlplane-0          NotReady   master   6m59s   v1.16.3
 workload-cluster-1-md-0-78469c8cf9-5kl9b   NotReady   <none>   5m45s   v1.16.3
 ```
 
-Pod Network Add-on のセットアップ A: Antrea パターン
+Pod Network Add-on のセットアップ A: Calico パターン
 
 ```
 # kubectl apply -f ./out/workload-cluster-1/addons.yaml
@@ -316,6 +316,42 @@ vsphere-cloud-controller-manager-ptx26                      1/1     Running   0 
 vsphere-csi-controller-0                                    5/5     Running   0          12h
 vsphere-csi-node-2wcst                                      3/3     Running   0          81s
 vsphere-csi-node-6955j                                      3/3     Running   0          85s
+```
+
+# 7. KinD ホスト: Demo App 起動
+
+NS 作成
+```
+[root@k8s-c02-f-01 ~]# kubectl create ns demo-01
+namespace/demo-01 created
+```
+
+デプロイ
+
+```
+[root@k8s-c02-f-01 ~]# kubectl -n demo-01 apply -f demo/yelb.yml
+service/redis-server created
+service/yelb-db created
+service/yelb-appserver created
+service/yelb-ui created
+deployment.apps/yelb-ui created
+deployment.apps/redis-server created
+deployment.apps/yelb-db created
+deployment.apps/yelb-appserver created
+```
+
+起動確認
+
+```
+[root@k8s-c02-f-01 ~]# kubectl -n demo-01 get pods
+NAME                              READY   STATUS    RESTARTS   AGE
+redis-server-55664c8d98-nmc6p     1/1     Running   0          54s
+yelb-appserver-794d7c9458-pxl69   1/1     Running   0          54s
+yelb-db-6747f54d9-sm2c5           1/1     Running   0          54s
+yelb-ui-79c68df689-2bgcs          1/1     Running   0          54s
+[root@k8s-c02-f-01 ~]# kubectl -n demo-01 get service yelb-ui
+NAME      TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+yelb-ui   NodePort   100.66.241.174   <none>        80:30715/TCP   76s
 ```
 
 # Reference
