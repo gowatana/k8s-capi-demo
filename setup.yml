@@ -17,23 +17,6 @@
 #      - os_reboot
 #      - os_reboot_wait
 
-  - name: install basic RPMs
-    yum:
-      name:
-        - oracle-golang-release-el7
-      state: latest
-
-  - name: install golang-bin RPMs
-    yum:
-      name:
-        - golang-bin
-      state: latest
-
-  - name: set GOPATH for root
-    lineinfile:
-      path: /root/.bash_profile
-      line: 'export PATH=$(go env GOPATH)/bin:$PATH'
-
   - name: install demo RPMs
     yum:
       name:
@@ -64,33 +47,40 @@
     notify:
       - sysctl_reload
 
-#  - name: get docker ce repo
-#    get_url:
-#      url: https://download.docker.com/linux/centos/docker-ce.repo
-#      dest: /etc/yum.repos.d/
+  - name: get docker ce repo
+    get_url:
+      url: https://download.docker.com/linux/centos/docker-ce.repo
+      dest: /etc/yum.repos.d/
 
-  - name: enable Oracle Linux ol7_addons repo
-    ini_file:
-      path: /etc/yum.repos.d/public-yum-ol7.repo
-      section: ol7_addons
-      option: enabled
-      value: 1
-    when:
-      - ansible_distribution == "OracleLinux"
-
-  - name: install docker and kubectl rpms
+  - name: install docker-ce rpm
     yum:
       name:
-        - docker-engine
-        - kubectl
-      enablerepo: ol7_addons
+        - docker-ce
       state: installed
+      disable_gpg_check: false
 
   - name: start docker
     service:
       name: docker
       enabled: true
       state: started
+
+  - name: create /root/bin dir
+    file:
+      path: /root/bin
+      state: directory
+
+  - name: install kind
+    get_url:
+      url: "https://github.com/kubernetes-sigs/kind/releases/download/v0.7.0/kind-linux-amd64"
+      dest: /root/bin/kind
+      mode: 0755
+
+  - name: install kubectl
+    get_url:
+      url: https://storage.googleapis.com/kubernetes-release/release/v1.17.0/bin/linux/amd64/kubectl
+      dest: /root/bin/kubectl
+      mode: 0755
 
   - name: add kubectl bash completion
     lineinfile:
@@ -101,11 +91,6 @@
     copy:
       src: files/envvars.txt
       dest: /root/envvars.txt
-
-  - name: create demo dir
-    file:
-      path: /root/demo
-      state: directory
 
   - name: remove anaconda-ks.cfg
     file:
@@ -143,6 +128,11 @@
   hosts: all
   remote_user: root
   tasks:
+
+  - name: create demo dir
+    file:
+      path: /root/demo
+      state: directory
 
   - name: copy demo YAMLs
     copy:
