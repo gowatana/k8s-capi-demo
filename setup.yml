@@ -95,8 +95,8 @@
 
   - name: copy envvars.txt
     copy:
-      src: files/envvars.txt
-      dest: /root/envvars.txt
+      src: files/envvars.txt.sample
+      dest: /root/envvars.txt.sample
 
   - name: remove anaconda-ks.cfg
     file:
