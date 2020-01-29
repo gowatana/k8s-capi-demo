@@ -1,6 +1,6 @@
 ---
 - name: setup KinD host
-  hosts: all
+  hosts: kind_host
   remote_user: root
   tasks:
 
@@ -48,7 +48,7 @@
     when:
       - ansible_distribution == "OracleLinux"
 
-  - name: install container-selinux rpms
+  - name: install container-selinux rpm
     yum:
       name:
         - container-selinux
