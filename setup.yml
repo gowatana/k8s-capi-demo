@@ -36,16 +36,26 @@
     copy:
       content: "net.ipv6.conf.all.disable_ipv6 = 1"
       dest: /etc/sysctl.d/ipv6.conf
-
-  - name: add sysctl file
-    copy:
-      content: |
-        net.bridge.bridge-nf-call-ip6tables = 1
-        net.bridge.bridge-nf-call-iptables = 1
-        vm.swappiness = 10
-      dest: /etc/sysctl.d/k8s.conf
     notify:
-      - sysctl_reload
+      - network_restart
+
+  - name: enable Oracle Linux ol7_addons repo
+    ini_file:
+      path: /etc/yum.repos.d/public-yum-ol7.repo
+      section: ol7_addons
+      option: enabled
+      value: 1
+    when:
+      - ansible_distribution == "OracleLinux"
+
+  - name: install container-selinux rpms
+    yum:
+      name:
+        - container-selinux
+      state: installed
+      enablerepo: ol7_addons
+    when:
+      - ansible_distribution == "OracleLinux"
 
   - name: get docker ce repo
     get_url:
@@ -104,17 +114,10 @@
       state: absent
 
   handlers:
-  - name: remove_swap
-    command:
-      cmd: swapoff -a
-
-  - name: sysctl_reload
-    command:
-      cmd: sysctl --system
-
-  - name: systemctl_daemon_reload
-    command:
-      cmd: systemctl daemon-reload
+  - name: network_restart
+    service:
+      name: network
+      state: restarted
 
   - name: os_reboot
     command:
