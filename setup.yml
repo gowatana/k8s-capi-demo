@@ -20,6 +20,7 @@
   - name: install demo RPMs
     yum:
       name:
+        - git
         - bind-utils
         - bridge-utils
         - tcpdump
