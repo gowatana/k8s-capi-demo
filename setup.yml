@@ -17,6 +17,15 @@
 #      - os_reboot
 #      - os_reboot_wait
 
+  - name: disable selinux
+    replace:
+      dest: /etc/selinux/config
+      regexp: '^SELINUX=.*$'
+      replace: 'SELINUX=disabled'
+    notify:
+      - os_reboot
+      - os_reboot_wait
+
   - name: install demo RPMs
     yum:
       name:
