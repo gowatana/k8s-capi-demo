@@ -49,6 +49,15 @@
     notify:
       - network_restart
 
+  - name: add sysctl file
+    copy:
+      content: |
+        net.bridge.bridge-nf-call-ip6tables = 1
+        net.bridge.bridge-nf-call-iptables = 1
+      dest: /etc/sysctl.d/k8s.conf
+    notify:
+      - sysctl_reload
+
   - name: enable Oracle Linux ol7_addons repo
     ini_file:
       path: /etc/yum.repos.d/public-yum-ol7.repo
@@ -124,6 +133,10 @@
       state: absent
 
   handlers:
+  - name: sysctl_reload
+    command:
+      cmd: sysctl --system
+
   - name: network_restart
     service:
       name: network
